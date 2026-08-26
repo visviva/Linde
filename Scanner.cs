@@ -1,0 +1,143 @@
+﻿namespace LINQ_ExpressionCompiler;
+
+internal class Scanner(string text)
+{
+    public string Text { get; } = text;
+
+    private int position = 0;
+
+    private bool IsAtEnd => position >= Text.Length;
+
+    private char Peek(int lookAhead) =>
+        position + lookAhead < Text.Length ? Text[position + lookAhead] : '\0';
+
+    private char Current => Peek(0);
+
+    private void Advance() => position++;
+
+    private Token ReadToken(TokenType tokenType, int length = 1)
+    {
+        var start = position;
+        position += length;
+        return new Token(tokenType, Text[start..position], start);
+    }
+
+    private Token ReadCompoundToken(
+        char secondCharacter,
+        TokenType singleType,
+        TokenType compoundType
+    )
+    {
+        if (Peek(1) == secondCharacter)
+        {
+            return ReadToken(compoundType, 2);
+        }
+        return ReadToken(singleType, 1);
+    }
+
+    private Token ReadString()
+    {
+        var start = position;
+        Advance(); // Skip the opening quote
+
+        var startOfString = position;
+
+        while (Current != '"')
+        {
+            Advance();
+        }
+
+        var endOfString = position;
+
+        Advance(); // Skip the closing quote
+
+        return new Token(TokenType.StringLiteral, Text[startOfString..endOfString], start);
+    }
+
+    private Token ReadIdentifier()
+    {
+        var start = position;
+
+        while ((char.IsLetter(Current) || char.IsDigit(Current) || Current == '_'))
+        {
+            Advance();
+        }
+
+        var identifier = Text[start..position];
+
+        return new Token(TokenType.Identifier, identifier, start);
+    }
+
+    private static Token TransformToReservedKeywordOrKeep(Token token) =>
+        token.Value.ToUpperInvariant() switch
+        {
+            "AND" => token with { Type = TokenType.And },
+            "OR" => token with { Type = TokenType.Or },
+            "NOT" => token with { Type = TokenType.Not },
+            _ => token,
+        };
+
+    private Token ReadNumber()
+    {
+        var start = position;
+
+        while (char.IsDigit(Current))
+            Advance();
+
+        return new Token(TokenType.Number, Text[start..position], start);
+    }
+
+    private void SkipWhitespace()
+    {
+        while (char.IsWhiteSpace(Current))
+        {
+            Advance();
+        }
+    }
+
+    private Token NextToken()
+    {
+        SkipWhitespace();
+
+        if (IsAtEnd)
+        {
+            return new Token(TokenType.EndOfInput, String.Empty, position);
+        }
+
+        return Current switch
+        {
+            '+' => ReadToken(TokenType.OperatorPlus),
+            '-' => ReadToken(TokenType.OperatorMinus),
+            '*' => ReadToken(TokenType.OperatorMultiply),
+            '/' => ReadToken(TokenType.OperatorDivide),
+
+            '(' => ReadToken(TokenType.ParenthesisOpen),
+            ')' => ReadToken(TokenType.ParenthesisClose),
+
+            '=' => ReadCompoundToken('=', TokenType.Equal, TokenType.EqualEqual),
+            '!' => ReadCompoundToken('=', TokenType.Not, TokenType.NotEqual),
+            '<' => ReadCompoundToken('=', TokenType.LessThan, TokenType.LessThanOrEqual),
+            '>' => ReadCompoundToken('=', TokenType.GreaterThan, TokenType.GreaterThanOrEqual),
+
+            '&' when Peek(1) is '&' => ReadToken(TokenType.And, 2),
+            '|' when Peek(1) is '|' => ReadToken(TokenType.Or, 2),
+
+            '"' => ReadString(),
+
+            var c when char.IsDigit(c) => ReadNumber(),
+            var c when char.IsLetter(c) || c is '_' => TransformToReservedKeywordOrKeep(
+                ReadIdentifier()
+            ),
+
+            _ => ReadToken(TokenType.Unknown),
+        };
+    }
+
+    public IEnumerable<Token> Scan()
+    {
+        while (position < Text.Length)
+        {
+            yield return NextToken();
+        }
+    }
+}
