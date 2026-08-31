@@ -10,31 +10,22 @@ internal sealed class Parser(IReadOnlyList<Token> tokens)
     private void Consume()
     {
         if (position < tokens.Count)
-        {
             position++;
-        }
     }
 
     private bool Match(params ReadOnlySpan<TokenType> tokenTypes)
     {
-        foreach (var t in tokenTypes)
-        {
-            if (Current.Type == t)
-            {
-                Consume();
-                return true;
-            }
-        }
+        if (!tokenTypes.Contains(Current.Type))
+            return false;
 
-        return false;
+        Consume();
+        return true;
     }
 
     private Token Expect(TokenType tokenType)
     {
         if (Current.Type != tokenType)
-        {
             throw new ParseException(Current, tokenType);
-        }
 
         var token = Current;
 
