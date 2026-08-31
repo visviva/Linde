@@ -22,5 +22,7 @@ internal enum TokenType
     Not,
     And,
     Or,
+    True,
+    False,
     EndOfInput,
 }

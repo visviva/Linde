@@ -74,6 +74,8 @@ internal class Scanner(string text)
             "AND" => token with { Type = TokenType.And },
             "OR" => token with { Type = TokenType.Or },
             "NOT" => token with { Type = TokenType.Not },
+            "TRUE" => token with { Type = TokenType.True },
+            "FALSE" => token with { Type = TokenType.False },
             _ => token,
         };
 
@@ -135,9 +137,12 @@ internal class Scanner(string text)
 
     public IEnumerable<Token> Scan()
     {
-        while (position < Text.Length)
+        Token token;
+
+        do
         {
-            yield return NextToken();
-        }
+            token = NextToken();
+            yield return token;
+        } while (token.Type != TokenType.EndOfInput);
     }
 }
