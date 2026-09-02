@@ -60,6 +60,7 @@ namespace Linde.Compiler
                 ),
             };
 
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(decimal))]
         private BinaryExpression CompileBinaryExpression(BinaryExpressionSyntax binary)
         {
             var left = CompileExpression(binary.Left);
