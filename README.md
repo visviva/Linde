@@ -1,5 +1,8 @@
 ![Linde](./assets/Linde3.png)
 
+[![CI](https://github.com/visviva/Linde/actions/workflows/ci.yml/badge.svg)](https://github.com/visviva/Linde/actions/workflows/ci.yml)
+[![Native AOT](https://github.com/visviva/Linde/actions/workflows/native-aot.yml/badge.svg)](https://github.com/visviva/Linde/actions/workflows/native-aot.yml)
+
 # Linde
 
 Linde is a small expression-language compiler. It turns a text predicate into a strongly typed LINQ
