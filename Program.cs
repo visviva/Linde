@@ -1,20 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using LINQ_ExpressionCompiler;
+﻿using LINQ_ExpressionCompiler;
 
 var scanner = new Scanner(
     """    
-(    
-    price > 100 and 
-    price >= 101 and 
-    price < 1000 and 
-    price <= 999 and 
-    category == "Books" 
-    and category != "Games"
-) 
-or 
-inStock == true
-
+category == "Books" && price > 130
 """
 );
 
@@ -39,33 +27,25 @@ var products = new[]
     new Product("Rare Book", "Books", 250m, false),
 };
 
-Dictionary<string, PropertyInfo> Create<
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T
->()
-{
-    return typeof(T)
-        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-        .Where(property =>
-            property.GetMethod is not null
-            && !property.GetMethod.IsStatic
-            && property.GetIndexParameters().Length == 0
-        )
-        .ToDictionary(
-            property => property.Name,
-            property => property,
-            StringComparer.OrdinalIgnoreCase
-        );
-}
+var compiler = new Compiler<Product>(ast);
+var predicate = compiler.Compile();
 
-var properties = Create<Product>();
+Console.WriteLine($"\nPredicate = {predicate.ToString()}\n");
 
-foreach (var product in products)
-{
-    Console.WriteLine($"Product: {product.Name}");
+var matchingProducts = products.Where(predicate.Compile());
 
-    foreach (var (name, property) in properties)
-    {
-        var value = property.GetValue(product);
-        Console.WriteLine($"  {name}: {value}");
-    }
-}
+foreach (var product in matchingProducts)
+    Console.WriteLine(product);
+
+//var properties = Create<Product>();
+
+//foreach (var product in products)
+//{
+//    Console.WriteLine($"Product: {product.Name}");
+
+//    foreach (var (name, property) in properties)
+//    {
+//        var value = property.GetValue(product);
+//        Console.WriteLine($"  {name}: {value}");
+//    }
+//}
