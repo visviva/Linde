@@ -1,4 +1,4 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿namespace Linde.Scanner;
 
 internal sealed record class Token(TokenType Type, string Value, int Position)
 {

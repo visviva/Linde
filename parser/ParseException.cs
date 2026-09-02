@@ -1,5 +1,8 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿using Linde.Scanner;
 
+namespace Linde.Parser;
+
+[Serializable]
 internal class ParseException : Exception
 {
     public Token Token { get; }

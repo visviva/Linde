@@ -1,51 +1,42 @@
-﻿using LINQ_ExpressionCompiler;
-
-var scanner = new Scanner(
-    """    
-category == "Books" && price > 130
-"""
-);
-
-var tokens = scanner.Scan().ToList();
-
-Console.WriteLine("Tokens:");
-foreach (var token in tokens)
-    Console.WriteLine($"{token}");
-Console.WriteLine('\n');
-
-var parser = new Parser(tokens);
-var ast = parser.Parse();
-
-Console.WriteLine("AST:");
-var printer = new AstPrinter(ast);
-printer.Print();
-
-var products = new[]
+﻿var products = new[]
 {
     new Product("C# in Depth", "Books", 120m, true),
     new Product("Chess Board", "Games", 80m, true),
     new Product("Rare Book", "Books", 250m, false),
+    new Product("Clean Code", "Books", 45m, true),
+    new Product("Mechanical Keyboard", "Electronics", 150m, true),
+    new Product("The Pragmatic Programmer", "Books", 135m, true),
+    new Product("Wireless Mouse", "Electronics", 65m, false),
+    new Product("Strategy Card Game", "Games", 35m, true),
+    new Product("Collector's Encyclopedia", "Books", 180m, false),
+    new Product("Standing Desk", "Furniture", 420m, true),
+    new Product("Notebook Set", "Stationery", 18m, true),
+    new Product("Algorithms Handbook", "Books", 145m, true),
+    new Product("Noise-Cancelling Headphones", "Electronics", 275m, false),
 };
 
-var compiler = new Compiler<Product>(ast);
-var predicate = compiler.Compile();
+Console.WriteLine("Collection:");
+foreach (var product in products)
+{
+    Console.WriteLine(product);
+}
+Console.WriteLine();
 
-Console.WriteLine($"\nPredicate = {predicate.ToString()}\n");
+var customExpression = "(category == \"Books\" && price > 130) && instock";
+Console.WriteLine($"Expression: {customExpression}\n");
+
+var expressionCompiler = new Linde.LindeExpressionCompiler<Product>(
+    printTokens: true,
+    printAst: true,
+    printExpression: true
+);
+
+var predicate = expressionCompiler.CompileExpression(customExpression);
 
 var matchingProducts = products.Where(predicate.Compile());
 
+Console.WriteLine("Result(s):");
 foreach (var product in matchingProducts)
     Console.WriteLine(product);
 
-//var properties = Create<Product>();
-
-//foreach (var product in products)
-//{
-//    Console.WriteLine($"Product: {product.Name}");
-
-//    foreach (var (name, property) in properties)
-//    {
-//        var value = property.GetValue(product);
-//        Console.WriteLine($"  {name}: {value}");
-//    }
-//}
+public record Product(string Name, string Category, decimal Price, bool InStock);

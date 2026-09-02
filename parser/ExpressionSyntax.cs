@@ -1,4 +1,6 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿using Linde.Scanner;
+
+namespace Linde.Parser;
 
 internal abstract record ExpressionSyntax;
 

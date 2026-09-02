@@ -1,4 +1,4 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿namespace Linde.Parser;
 
 internal class AstPrinter(ExpressionSyntax expression)
 {

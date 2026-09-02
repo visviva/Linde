@@ -1,4 +1,4 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿namespace Linde.Scanner;
 
 internal class Scanner(string text)
 {
@@ -12,6 +12,7 @@ internal class Scanner(string text)
         position + lookAhead < Text.Length ? Text[position + lookAhead] : '\0';
 
     private char Current => Peek(0);
+    private char Next => Peek(1);
 
     private void Advance() => position++;
 
@@ -28,7 +29,7 @@ internal class Scanner(string text)
         TokenType compoundType
     )
     {
-        if (Peek(1) == secondCharacter)
+        if (Next == secondCharacter)
         {
             return ReadToken(compoundType, 2);
         }
@@ -116,13 +117,13 @@ internal class Scanner(string text)
             '(' => ReadToken(TokenType.ParenthesisOpen),
             ')' => ReadToken(TokenType.ParenthesisClose),
 
-            '=' => ReadCompoundToken('=', TokenType.Equal, TokenType.EqualEqual),
+            '=' => ReadCompoundToken('=', TokenType.Equal, TokenType.Equal),
             '!' => ReadCompoundToken('=', TokenType.Not, TokenType.NotEqual),
             '<' => ReadCompoundToken('=', TokenType.LessThan, TokenType.LessThanOrEqual),
             '>' => ReadCompoundToken('=', TokenType.GreaterThan, TokenType.GreaterThanOrEqual),
 
-            '&' when Peek(1) is '&' => ReadToken(TokenType.And, 2),
-            '|' when Peek(1) is '|' => ReadToken(TokenType.Or, 2),
+            '&' when Next is '&' => ReadToken(TokenType.And, 2),
+            '|' when Next is '|' => ReadToken(TokenType.Or, 2),
 
             '"' => ReadString(),
 

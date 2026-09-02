@@ -1,4 +1,6 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿using Linde.Scanner;
+
+namespace Linde.Parser;
 
 internal sealed class Parser(IReadOnlyList<Token> tokens)
 {
@@ -148,7 +150,7 @@ internal sealed class Parser(IReadOnlyList<Token> tokens)
     {
         var left = ParseComparison();
 
-        if (Match(TokenType.EqualEqual, TokenType.NotEqual))
+        if (Match(TokenType.Equal, TokenType.NotEqual))
         {
             var op = Previous;
             var right = ParseComparison();

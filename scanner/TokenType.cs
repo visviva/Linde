@@ -1,4 +1,4 @@
-﻿namespace LINQ_ExpressionCompiler;
+﻿namespace Linde.Scanner;
 
 internal enum TokenType
 {
@@ -9,7 +9,6 @@ internal enum TokenType
     OperatorMultiply,
     OperatorDivide,
     Equal,
-    EqualEqual,
     NotEqual,
     LessThan,
     GreaterThan,
