@@ -1,9 +1,9 @@
-﻿using Linde.Scanner;
+using Linde.Scanner;
 
 namespace Linde.Parser;
 
 [Serializable]
-internal class ParseException : Exception
+internal sealed class ParseException : Exception
 {
     public Token Token { get; }
 

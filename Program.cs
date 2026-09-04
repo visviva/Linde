@@ -1,4 +1,4 @@
-﻿var products = new[]
+var products = new[]
 {
     new Product("C# in Depth", "Books", 120m, true),
     new Product("Chess Board", "Games", 80m, true),
@@ -37,6 +37,8 @@ var matchingProducts = products.Where(predicate.Compile());
 
 Console.WriteLine("Result(s):");
 foreach (var product in matchingProducts)
+{
     Console.WriteLine(product);
+}
 
 public record Product(string Name, string Category, decimal Price, bool InStock);

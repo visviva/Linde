@@ -1,6 +1,6 @@
-﻿namespace Linde.Scanner;
+namespace Linde.Scanner;
 
-internal class Scanner(string text)
+internal sealed class Scanner(string text)
 {
     public string Text { get; } = text;
 
@@ -89,7 +89,9 @@ internal class Scanner(string text)
         var start = position;
 
         while (char.IsDigit(Current))
+        {
             Advance();
+        }
 
         return new Token(TokenType.Number, Text[start..position], start);
     }
@@ -108,7 +110,7 @@ internal class Scanner(string text)
 
         if (IsAtEnd)
         {
-            return new Token(TokenType.EndOfInput, String.Empty, position);
+            return new Token(TokenType.EndOfInput, string.Empty, position);
         }
 
         return Current switch

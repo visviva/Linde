@@ -1,4 +1,4 @@
-﻿using Linde.Scanner;
+using Linde.Scanner;
 
 namespace Linde.Parser;
 
@@ -12,13 +12,17 @@ internal sealed class Parser(IReadOnlyList<Token> tokens)
     private void Consume()
     {
         if (position < tokens.Count)
+        {
             position++;
+        }
     }
 
     private bool Match(params ReadOnlySpan<TokenType> tokenTypes)
     {
         if (!tokenTypes.Contains(Current.Type))
+        {
             return false;
+        }
 
         Consume();
         return true;
@@ -27,7 +31,9 @@ internal sealed class Parser(IReadOnlyList<Token> tokens)
     private Token Expect(TokenType tokenType)
     {
         if (Current.Type != tokenType)
+        {
             throw new ParseException(Current, tokenType);
+        }
 
         var token = Current;
 

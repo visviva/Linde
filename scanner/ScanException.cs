@@ -1,7 +1,7 @@
-﻿namespace Linde.Scanner;
+namespace Linde.Scanner;
 
 [Serializable]
-internal class ScanException : Exception
+internal sealed class ScanException : Exception
 {
     public ScanException() { }
 

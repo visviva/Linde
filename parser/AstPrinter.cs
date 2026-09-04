@@ -1,11 +1,11 @@
-﻿namespace Linde.Parser;
+namespace Linde.Parser;
 
-internal class AstPrinter(ExpressionSyntax expression)
+internal sealed class AstPrinter(ExpressionSyntax expression)
 {
     public void Print()
     {
         Console.WriteLine(GetLabel(expression));
-        PrintChildren(expression, String.Empty);
+        PrintChildren(expression, string.Empty);
     }
 
     private static void PrintChildren(ExpressionSyntax node, string prefix)

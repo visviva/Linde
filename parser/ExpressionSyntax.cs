@@ -1,4 +1,4 @@
-﻿using Linde.Scanner;
+using Linde.Scanner;
 
 namespace Linde.Parser;
 

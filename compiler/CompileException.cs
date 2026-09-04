@@ -1,4 +1,4 @@
-﻿namespace Linde.Compiler;
+namespace Linde.Compiler;
 
 [Serializable]
-internal class CompileException(string? message) : Exception(message) { }
+internal sealed class CompileException(string? message) : Exception(message) { }

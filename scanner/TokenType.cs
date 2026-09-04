@@ -1,4 +1,4 @@
-﻿namespace Linde.Scanner;
+namespace Linde.Scanner;
 
 internal enum TokenType
 {
