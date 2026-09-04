@@ -53,7 +53,7 @@ namespace Linde.Compiler
                     Expression.Constant(-1.0m),
                     CompileExpression(unary.Value)
                 ),
-                TokenType.Not => Expression.Negate(CompileExpression(unary.Value)),
+                TokenType.Not => Expression.Not(CompileExpression(unary.Value)),
 
                 _ => throw new CompileException(
                     $"Unknown unary operator: {unary.Operator.Value} at position {unary.Operator.Position}"
