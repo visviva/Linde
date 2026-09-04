@@ -45,6 +45,10 @@ internal class Scanner(string text)
 
         while (Current != '"')
         {
+            if (IsAtEnd)
+            {
+                throw new ScanException($"Unterminated string literal at position {IsAtEnd}");
+            }
             Advance();
         }
 
