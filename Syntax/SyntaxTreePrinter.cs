@@ -1,6 +1,6 @@
-namespace Linde.Parser;
+namespace Linde.Syntax;
 
-internal sealed class AstPrinter(ExpressionSyntax expression)
+internal sealed class SyntaxTreePrinter(ExpressionSyntax expression)
 {
     public void Print()
     {
@@ -17,8 +17,8 @@ internal sealed class AstPrinter(ExpressionSyntax expression)
                 PrintBranch(binary.Right, prefix, isLast: true);
                 break;
 
-            case UnaryExpressionSyntax unary:
-                PrintBranch(unary.Value, prefix, isLast: true);
+            case PrefixUnaryExpressionSyntax unary:
+                PrintBranch(unary.Operand, prefix, isLast: true);
                 break;
         }
     }
@@ -35,15 +35,13 @@ internal sealed class AstPrinter(ExpressionSyntax expression)
     private static string GetLabel(ExpressionSyntax node) =>
         node switch
         {
-            NumberExpressionSyntax number => number.Value.ToString(),
-            BoolExpressionSyntax boolean => boolean.Value ? "true" : "false",
-            StringExpressionSyntax text => $"\"{text.Value}\"",
-            IdentifierExpressionSyntax identifier => identifier.Identifier,
-            BinaryExpressionSyntax binary => binary.Operator.Value,
-            UnaryExpressionSyntax unary => unary.Operator.Value,
+            NumericLiteralExpressionSyntax number => number.Value.ToString(),
+            BooleanLiteralExpressionSyntax boolean => boolean.Value ? "true" : "false",
+            StringLiteralExpressionSyntax text => $"\"{text.Value}\"",
+            NameExpressionSyntax identifier => identifier.Identifier,
+            BinaryExpressionSyntax binary => binary.OperatorToken.Text,
+            PrefixUnaryExpressionSyntax unary => unary.OperatorToken.Text,
 
-            _ => throw new InvalidOperationException(
-                $"Unsupported expression syntax: {node.GetType().Name}"
-            ),
+            _ => throw new InvalidOperationException($"Unsupported expression syntax: {node.GetType().Name}"),
         };
 }

@@ -22,10 +22,10 @@ foreach (var product in products)
 }
 Console.WriteLine();
 
-var customExpression = "(category == \"Books\" && price > 130) && instock";
+var customExpression = "(category is \"Books\" and price > 130) and instock";
 Console.WriteLine($"Expression: {customExpression}\n");
 
-var expressionCompiler = new Linde.LindeExpressionCompiler<Product>(
+var expressionCompiler = new Linde.PredicateCompiler<Product>(
     printTokens: true,
     printAst: true,
     printExpression: true

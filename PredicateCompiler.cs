@@ -1,15 +1,16 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
+using Linde.Syntax;
 
 namespace Linde;
 
-internal sealed class LindeExpressionCompiler<
+internal sealed class PredicateCompiler<
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T
 >(bool printTokens = false, bool printAst = false, bool printExpression = false)
 {
     public Expression<Func<T, bool>> CompileExpression(string predicateExpression)
     {
-        var scanner = new Scanner.Scanner(predicateExpression);
+        var scanner = new Syntax.Lexer(predicateExpression);
         var tokens = scanner.Scan().ToList();
 
         if (printTokens)
@@ -22,18 +23,18 @@ internal sealed class LindeExpressionCompiler<
             Console.WriteLine();
         }
 
-        var parser = new Parser.Parser(tokens);
+        var parser = new Parser(tokens);
         var ast = parser.Parse();
 
         if (printAst)
         {
-            var astPrinter = new Parser.AstPrinter(ast);
+            var astPrinter = new SyntaxTreePrinter(ast);
             Console.WriteLine("Abstract Syntax Tree:\n");
             astPrinter.Print();
             Console.WriteLine();
         }
 
-        var compiler = new Compiler.Compiler<T>(ast);
+        var compiler = new Binder.Binder<T>(ast);
         var expression = compiler.Compile();
 
         if (printExpression)
