@@ -78,8 +78,8 @@ namespace Linde.Compiler
                 TokenType.LessThan => BinaryExpression.LessThan(left, right),
                 TokenType.GreaterThanOrEqual => BinaryExpression.GreaterThanOrEqual(left, right),
                 TokenType.LessThanOrEqual => BinaryExpression.LessThanOrEqual(left, right),
-                TokenType.And => BinaryExpression.And(left, right),
-                TokenType.Or => BinaryExpression.Or(left, right),
+                TokenType.And => BinaryExpression.AndAlso(left, right),
+                TokenType.Or => BinaryExpression.OrElse(left, right),
                 _ => throw new CompileException(
                     $"Unknown unary operator: {binary.Operator.Value} at position {binary.Operator.Position}"
                 ),
