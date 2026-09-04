@@ -106,7 +106,18 @@ namespace Linde.Compiler
                 _ => throw new CompileException($"Unknown AST node: {node}"),
             };
 
-        public Expression<Func<T, bool>> Compile() =>
-            Expression.Lambda<Func<T, bool>>(CompileExpression(Ast), parameter);
+        public Expression<Func<T, bool>> Compile()
+        {
+            var body = CompileExpression(Ast);
+
+            if (body.Type != typeof(bool))
+            {
+                throw new CompileException(
+                    $"Predicate must have type of bool, but has type of {body.Type.Name}"
+                );
+            }
+
+            return Expression.Lambda<Func<T, bool>>(body, parameter);
+        }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using Linde.Compiler;
-using Linde.Parser;
-using Linde.Scanner;
 
 namespace Linde
 {
@@ -34,33 +31,6 @@ namespace Linde
                 Console.WriteLine("Abstract Syntax Tree:\n");
                 astPrinter.Print();
                 Console.WriteLine();
-            }
-
-            // Check for top level node being a predicate
-            TokenType[] predicateOperators =
-            [
-                TokenType.And,
-                TokenType.Or,
-                TokenType.LessThan,
-                TokenType.GreaterThan,
-                TokenType.GreaterThanOrEqual,
-                TokenType.LessThanOrEqual,
-            ];
-
-            var isPredicate = ast switch
-            {
-                BoolExpressionSyntax => true,
-                UnaryExpressionSyntax unaryExpression => unaryExpression.Operator.Type
-                    == TokenType.Not,
-                BinaryExpressionSyntax binaryExpression => predicateOperators.Contains(
-                    binaryExpression.Operator.Type
-                ),
-                _ => false,
-            };
-
-            if (!isPredicate)
-            {
-                throw new CompileException($"Expression must be a boolean predicate");
             }
 
             var compiler = new Compiler.Compiler<T>(ast);
