@@ -1,9 +1,7 @@
 namespace Linde.Syntax;
 
-internal sealed class Lexer(string text)
+internal sealed class Lexer(string Text)
 {
-    public string Text { get; } = text;
-
     private int position = 0;
 
     private bool IsAtEnd => position >= Text.Length;
@@ -19,7 +17,10 @@ internal sealed class Lexer(string text)
     private SyntaxToken ReadToken(SyntaxKind tokenType, int length = 1)
     {
         var start = position;
-        position += length;
+        for (int i = 0; i < length; i++)
+        {
+            Advance();
+        }
         return new SyntaxToken(tokenType, Text[start..position], start);
     }
 
@@ -63,7 +64,7 @@ internal sealed class Lexer(string text)
     {
         var start = position;
 
-        while ((char.IsLetter(Current) || char.IsDigit(Current) || Current == '_'))
+        while ((char.IsLetter(Current) || char.IsDigit(Current)))
         {
             Advance();
         }
