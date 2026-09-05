@@ -33,7 +33,7 @@ var expressionCompiler = new Linde.PredicateCompiler<Product>(
 
 var predicate = expressionCompiler.CompileExpression(customExpression);
 
-var matchingProducts = products.Where(predicate.Compile());
+var matchingProducts = products.Where(predicate);
 
 Console.WriteLine("Result(s):");
 foreach (var product in matchingProducts)
