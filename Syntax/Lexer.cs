@@ -89,7 +89,7 @@ internal sealed class Lexer(string text)
     {
         var start = position;
 
-        while (char.IsDigit(Current))
+        while (char.IsDigit(Current) || Current == '.' || Current == ',')
         {
             Advance();
         }

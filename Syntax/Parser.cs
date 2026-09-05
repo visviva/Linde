@@ -43,7 +43,8 @@ internal sealed class Parser(IReadOnlyList<SyntaxToken> tokens)
     private NumericLiteralExpressionSyntax ParseNumericLiteralExpression()
     {
         var token = Expect(SyntaxKind.NumberToken);
-        return new NumericLiteralExpressionSyntax(decimal.Parse(token.Text), token);
+        var cleanedText = token.Text.Replace(",", "");
+        return new NumericLiteralExpressionSyntax(decimal.Parse(cleanedText), token);
     }
 
     private NameExpressionSyntax ParseNameExpression()
