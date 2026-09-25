@@ -1,0 +1,26 @@
+{
+  "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+  "variables": [
+    {
+      "name": "staged-diff-files",
+      "command": "git",
+      "args": [
+        "diff",
+        "--cached",
+        "--name-only",
+        "--no-ext-diff",
+        "--diff-filter=ACMRTUXB"
+      ],
+      "staged": true
+    }
+  ],
+  "tasks": [
+    {
+      "name": "Format C# with CSharpier",
+      "group": "pre-commit",
+      "command": "dotnet",
+      "args": ["csharpier", "format", "${staged-diff-files}"],
+      "include": ["**/*.cs"]
+    }
+  ]
+}

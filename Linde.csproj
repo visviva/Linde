@@ -12,4 +12,31 @@
     <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
+  <Target
+    Name="Husky"
+    AfterTargets="Restore"
+    Condition="'$(HUSKY)' != 0"
+    Inputs="$(MSBuildThisFileDirectory)dotnet-tools.json"
+    Outputs="$(MSBuildThisFileDirectory).husky/_/install.stamp"
+  >
+    <Exec
+      Command="dotnet tool restore"
+      StandardOutputImportance="Low"
+      StandardErrorImportance="High"
+    />
+    <Exec
+      Command="dotnet husky install"
+      StandardOutputImportance="Low"
+      StandardErrorImportance="High"
+      WorkingDirectory="$(MSBuildThisFileDirectory)"
+    />
+    <Touch
+      Files="$(MSBuildThisFileDirectory).husky/_/install.stamp"
+      AlwaysCreate="true"
+      Condition="Exists('$(MSBuildThisFileDirectory).husky/_')"
+    />
+    <ItemGroup>
+      <FileWrites Include="$(MSBuildThisFileDirectory).husky/_/install.stamp" />
+    </ItemGroup>
+  </Target>
 </Project>
